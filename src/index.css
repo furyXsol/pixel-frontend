@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-display: swap;
+  font-family: wf_4bbceedcfc1a4581a6331c180;
+  src: url("https://static.wixstatic.com/ufonts/0e20ad_4bbceedcfc1a4581a6331c1803915fa9/woff2/file.woff2") format("woff2"),
+  url("https://static.wixstatic.com/ufonts/0e20ad_4bbceedcfc1a4581a6331c1803915fa9/woff/file.woff") format("woff"),
+  url("https://static.wixstatic.com/ufonts/0e20ad_4bbceedcfc1a4581a6331c1803915fa9/ttf/file.ttf") format("ttf");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: wf_56906c412d2a453f907c10dd5;
+  src: url("https://static.wixstatic.com/ufonts/8df40a_56906c412d2a453f907c10dd5905a6e8/woff2/file.woff2") format("woff2"),
+  url("https://static.wixstatic.com/ufonts/8df40a_56906c412d2a453f907c10dd5905a6e8/woff/file.woff") format("woff"),
+  url("https://static.wixstatic.com/ufonts/8df40a_56906c412d2a453f907c10dd5905a6e8/ttf/file.ttf") format("ttf");
+}
+
+body {
+  background-color: #1A1C1F;
+  font-family: 'wf_4bbceedcfc1a4581a6331c180';
+  width: 100%;
+}
