@@ -18,3 +18,7 @@ export interface HolderInfo {
   address: string
   amount: string
 }
+
+export interface StakerCount {
+  count: number
+}

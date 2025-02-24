@@ -21,7 +21,7 @@ const Header = () => {
         <div className="flex-1 flex items-center justify-end">
           <div className="flex-1 flex justify-center  text-white text-[10px] hidden md:flex md:gap-x-[20px] lg:gap-x-[100px]" style={{fontFamily:"wf_56906c412d2a453f907c10dd5"}}>
             <Link to="/">BUY $PXP</Link>
-            <Link to="/">STAKE $PXP</Link>
+            <Link to="/staking">STAKE $PXP</Link>
             <Link to="/">PXP NFT'S (SOON)</Link>
           </div>
           {!connected && <button

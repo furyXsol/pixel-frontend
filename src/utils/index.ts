@@ -48,3 +48,7 @@ export const getMarketCap = (solAmount: number, soldTokenAmount: number, solPric
     return `${Number(numMarketCap.toFixed(2))}`
   }
 }
+
+export const numberWithCommas = (x: number): string => {
+  return x.toLocaleString('en-US')
+}

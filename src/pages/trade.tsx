@@ -23,7 +23,7 @@ import {
   createAssociatedTokenAccountInstruction,
 } from '@solana/spl-token'
 import { BN } from '@coral-xyz/anchor'
-import { FEE_RECIPIENT, IS_MAIN, PROGRAM_ID } from '../constants'
+import { FEE_RECIPIENT, IS_MAIN, PROGRAM_ID, STAKING_TOKEN } from '../constants'
 import { getJitoTransferJito, sendTransactionWithJito } from '../utils/jito'
 import { useTokenInfo, useSolPrice, useHolder } from '../hooks'
 import { getMarketCap, getBondingCurvePercent, getSolAmount, shortenAddress } from '../utils'
@@ -104,15 +104,20 @@ const Trade = () => {
     try {
       const tokenMintPubkey = new PublicKey(tokenMint)
       const program = getAnchorProgram(connection, wallet)
+      const stakingToken = new PublicKey(STAKING_TOKEN)
       const [ config ] = PublicKey.findProgramAddressSync(
         [Buffer.from("config")],
         program.programId
       )
-      const [ bonding_curve ]= PublicKey.findProgramAddressSync(
+      const [ stakingHolder ] = PublicKey.findProgramAddressSync(
+        [Buffer.from("stake_holder"), stakingToken.toBuffer()],
+        program.programId
+      )
+      const [ bondingCurve ]= PublicKey.findProgramAddressSync(
         [Buffer.from('bonding_curve'), tokenMintPubkey.toBuffer()],
         program.programId
       )
-      const assiciated_bonding_curve = getAssociatedTokenAddressSync(tokenMintPubkey, bonding_curve, true)
+      const assiciatedBondingCurve = getAssociatedTokenAddressSync(tokenMintPubkey, bondingCurve, true)
       const inputSolAmount = BigInt(Number(inputSol) * 1000000000) * BigInt(110) / BigInt(100)
 
       const associatedUserToken = getAssociatedTokenAddressSync(tokenMintPubkey, wallet.publicKey)
@@ -138,8 +143,9 @@ const Trade = () => {
         tokenMint: tokenMintPubkey,
         config,
         feeRecipient,
-        bondingCurve: bonding_curve,
-        associtedBondingCurve: assiciated_bonding_curve,
+        stakeHolder: stakingHolder,
+        bondingCurve: bondingCurve,
+        associtedBondingCurve: assiciatedBondingCurve,
         associtedUserTokenAccount: associatedUserToken,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         tokenProgram: TOKEN_PROGRAM_ID,
@@ -217,15 +223,20 @@ const Trade = () => {
     try {
       const tokenMintPubkey = new PublicKey(tokenMint)
       const program = getAnchorProgram(connection, wallet)
+      const stakingToken = new PublicKey(STAKING_TOKEN)
       const [ config ] = PublicKey.findProgramAddressSync(
         [Buffer.from("config")],
         program.programId
       )
-      const [ bonding_curve ]= PublicKey.findProgramAddressSync(
+      const [ stakingHolder ] = PublicKey.findProgramAddressSync(
+        [Buffer.from("stake_holder"), stakingToken.toBuffer()],
+        program.programId
+      )
+      const [ bondingCurve ]= PublicKey.findProgramAddressSync(
         [Buffer.from('bonding_curve'), tokenMintPubkey.toBuffer()],
         program.programId
       )
-      const assiciated_bonding_curve = getAssociatedTokenAddressSync(tokenMintPubkey, bonding_curve, true)
+      const assiciatedBondingCurve = getAssociatedTokenAddressSync(tokenMintPubkey, bondingCurve, true)
       const associatedUserToken = getAssociatedTokenAddressSync(tokenMintPubkey, wallet.publicKey)
       const feeRecipient = new PublicKey(FEE_RECIPIENT)
       const sellTokenIns = await program.methods.sell({
@@ -236,8 +247,9 @@ const Trade = () => {
         tokenMint: tokenMintPubkey,
         config,
         feeRecipient,
-        bondingCurve: bonding_curve,
-        associtedBondingCurve: assiciated_bonding_curve,
+        stakeHolder: stakingHolder,
+        bondingCurve,
+        associtedBondingCurve: assiciatedBondingCurve,
         associtedUserTokenAccount: associatedUserToken,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         tokenProgram: TOKEN_PROGRAM_ID,

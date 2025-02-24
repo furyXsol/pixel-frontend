@@ -31,6 +31,52 @@ export type Pixel = {
       ]
     },
     {
+      "name": "createStakeHolder",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeToken",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "updateConfig",
       "accounts": [
         {
@@ -157,6 +203,14 @@ export type Pixel = {
           ]
         },
         {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
           "name": "bondingCurve",
           "isMut": true,
           "isSigner": false
@@ -213,6 +267,14 @@ export type Pixel = {
           "name": "config",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
         },
         {
           "name": "feeRecipient",
@@ -318,6 +380,229 @@ export type Pixel = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "stake",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "stakeTokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "userStakeInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "StakeParams"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unstake",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "stakeTokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "userStakeInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "UnstakeParams"
+          }
+        }
+      ]
+    },
+    {
+      "name": "claim",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "stakeTokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "userStakeInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "withdrawStakeHolder",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -392,7 +677,83 @@ export type Pixel = {
           },
           {
             "name": "feeBasePoints",
+            "type": "u16"
+          },
+          {
+            "name": "feeStakeholders",
+            "type": "u16"
+          },
+          {
+            "name": "epochDuration",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "stakeToken",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stakeHolder",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "rewards",
+            "type": {
+              "defined": "BTreeMap<u16,u64>"
+            }
+          },
+          {
+            "name": "totalStakes",
+            "type": {
+              "defined": "BTreeMap<u16,u64>"
+            }
+          },
+          {
+            "name": "curentTotalStake",
             "type": "u64"
+          },
+          {
+            "name": "firstEpochStartTime",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "userStakeInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "stakeAmount",
+            "type": "u64"
+          },
+          {
+            "name": "pendingReward",
+            "type": "u64"
+          },
+          {
+            "name": "lastEpoch",
+            "type": "u16"
           },
           {
             "name": "bump",
@@ -434,7 +795,19 @@ export type Pixel = {
           },
           {
             "name": "feeBasePoints",
-            "type": "u64"
+            "type": "u16"
+          },
+          {
+            "name": "feeStakeholders",
+            "type": "u16"
+          },
+          {
+            "name": "stakeToken",
+            "type": "publicKey"
+          },
+          {
+            "name": "epochDuration",
+            "type": "u32"
           }
         ]
       }
@@ -483,7 +856,19 @@ export type Pixel = {
           {
             "name": "feeBasePoints",
             "type": {
-              "option": "u64"
+              "option": "u16"
+            }
+          },
+          {
+            "name": "feeStakeholders",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "stakeToken",
+            "type": {
+              "option": "publicKey"
             }
           }
         ]
@@ -536,6 +921,30 @@ export type Pixel = {
           },
           {
             "name": "minSolOutput",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UnstakeParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
             "type": "u64"
           }
         ]
@@ -594,6 +1003,11 @@ export type Pixel = {
         {
           "name": "tokenOutput",
           "type": "u64",
+          "index": false
+        },
+        {
+          "name": "isCompleted",
+          "type": "bool",
           "index": false
         }
       ]
@@ -716,6 +1130,52 @@ export const IDL: Pixel = {
       ]
     },
     {
+      "name": "createStakeHolder",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeToken",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "updateConfig",
       "accounts": [
         {
@@ -842,6 +1302,14 @@ export const IDL: Pixel = {
           ]
         },
         {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
           "name": "bondingCurve",
           "isMut": true,
           "isSigner": false
@@ -898,6 +1366,14 @@ export const IDL: Pixel = {
           "name": "config",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
         },
         {
           "name": "feeRecipient",
@@ -1003,6 +1479,229 @@ export const IDL: Pixel = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "stake",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "stakeTokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "userStakeInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "StakeParams"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unstake",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "stakeTokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "userStakeInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "UnstakeParams"
+          }
+        }
+      ]
+    },
+    {
+      "name": "claim",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "stakeTokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "userStakeInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stakeHolderAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "withdrawStakeHolder",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "stakeHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -1077,7 +1776,83 @@ export const IDL: Pixel = {
           },
           {
             "name": "feeBasePoints",
+            "type": "u16"
+          },
+          {
+            "name": "feeStakeholders",
+            "type": "u16"
+          },
+          {
+            "name": "epochDuration",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "stakeToken",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stakeHolder",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "rewards",
+            "type": {
+              "defined": "BTreeMap<u16,u64>"
+            }
+          },
+          {
+            "name": "totalStakes",
+            "type": {
+              "defined": "BTreeMap<u16,u64>"
+            }
+          },
+          {
+            "name": "curentTotalStake",
             "type": "u64"
+          },
+          {
+            "name": "firstEpochStartTime",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "userStakeInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "stakeAmount",
+            "type": "u64"
+          },
+          {
+            "name": "pendingReward",
+            "type": "u64"
+          },
+          {
+            "name": "lastEpoch",
+            "type": "u16"
           },
           {
             "name": "bump",
@@ -1119,7 +1894,19 @@ export const IDL: Pixel = {
           },
           {
             "name": "feeBasePoints",
-            "type": "u64"
+            "type": "u16"
+          },
+          {
+            "name": "feeStakeholders",
+            "type": "u16"
+          },
+          {
+            "name": "stakeToken",
+            "type": "publicKey"
+          },
+          {
+            "name": "epochDuration",
+            "type": "u32"
           }
         ]
       }
@@ -1168,7 +1955,19 @@ export const IDL: Pixel = {
           {
             "name": "feeBasePoints",
             "type": {
-              "option": "u64"
+              "option": "u16"
+            }
+          },
+          {
+            "name": "feeStakeholders",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "stakeToken",
+            "type": {
+              "option": "publicKey"
             }
           }
         ]
@@ -1221,6 +2020,30 @@ export const IDL: Pixel = {
           },
           {
             "name": "minSolOutput",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UnstakeParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
             "type": "u64"
           }
         ]
@@ -1279,6 +2102,11 @@ export const IDL: Pixel = {
         {
           "name": "tokenOutput",
           "type": "u64",
+          "index": false
+        },
+        {
+          "name": "isCompleted",
+          "type": "bool",
           "index": false
         }
       ]

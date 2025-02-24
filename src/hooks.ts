@@ -1,13 +1,14 @@
 import { PublicKey } from '@solana/web3.js'
 import { PROGRAM_ID } from './constants'
-import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react'
+import { AnchorWallet, useAnchorWallet, useConnection } from '@solana/wallet-adapter-react'
 import { getAnchorProgram } from './constants/anchor'
 import { useEffect, useState } from 'react'
 import { BN } from '@coral-xyz/anchor'
 import { useQuery } from '@tanstack/react-query'
-import { BACKEND_URI, IS_MAIN, SOLANA_DEV_RPC, SOLANA_MAIN_RPC } from './constants'
+import { BACKEND_URI, IS_MAIN, SOLANA_DEV_RPC, SOLANA_MAIN_RPC, STAKING_TOKEN } from './constants'
 import axios from 'axios'
-import { TokenInfo, HolderInfo } from './types'
+import { TokenInfo, HolderInfo, StakerCount } from './types'
+import { getAccount, getAssociatedTokenAddressSync } from '@solana/spl-token'
 
 export const useTokenInfo = (tokenMint: string) => {
   const { data, isLoading } = useQuery({
@@ -101,6 +102,29 @@ export const useLaunchedTokens = () => {
   return { data, isLoading}
 }
 
+export const useStakerCount = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      'staker-count',
+    ],
+    queryFn: async () => {
+      try {
+        const res = await axios.get(`${BACKEND_URI}/tokens/staker_count`)
+        if (!res || !res.data) {
+          return undefined
+        }
+        const resCount: StakerCount = res.data
+        return resCount.count
+      } catch(e) {
+        console.log(e)
+        return undefined
+      }
+    },
+    refetchInterval: 10000 // every 10 seconds
+  })
+  return { data, isLoading}
+}
+
 export const useBondingCurveInfo = (tokenMint: string | undefined) => {
   const [bondingCurveInfo, setBondingCurveInfo] = useState<{
     virtualTokenReserves: BN,
@@ -131,6 +155,72 @@ export const useBondingCurveInfo = (tokenMint: string | undefined) => {
   return {
     bondingCurveInfo
   }
+}
+
+export const useStakeInfo = () => {
+  const { connection } = useConnection()
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      'stake-info',
+    ],
+    queryFn: async () => {
+      if (!connection) return undefined
+      try {
+        const stakingToken = new PublicKey(STAKING_TOKEN)
+        const [ stakingHolder ] = PublicKey.findProgramAddressSync(
+          [Buffer.from("stake_holder"), stakingToken.toBuffer()],
+          new PublicKey(PROGRAM_ID)
+        )
+        const program = getAnchorProgram(connection)
+        const info = await program.account.stakeHolder.fetch(stakingHolder)
+        const rewardAmount = await program.provider.connection.getBalance(stakingHolder, {commitment: 'confirmed'})
+        return {
+          totalStake: Number((BigInt(info.curentTotalStake.toString()) / BigInt(1000000000)).toString()),
+          rewardAmount: Number((rewardAmount / 1000000000).toFixed(2))
+        }
+      } catch (e) {
+        return undefined
+      }
+    },
+    refetchInterval: 10000 // every 10 seconds
+  })
+  return { data, isLoading}
+}
+
+export const useStakeTokenBalance = () => {
+  const wallet = useAnchorWallet()
+  const { connection } = useConnection()
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      'stake-info',
+      wallet,
+    ],
+    queryFn: async () => {
+      if (!wallet || !connection) return undefined
+      try {
+        const stakingToken = new PublicKey(STAKING_TOKEN)
+        const userAta = getAssociatedTokenAddressSync(stakingToken, wallet.publicKey)
+        const account = await getAccount(connection, userAta)
+        const program = getAnchorProgram(connection)
+        const [ userStakeInfoPubkey ] = PublicKey.findProgramAddressSync(
+          [Buffer.from("user_stake_info"),
+           stakingToken.toBuffer(),
+           wallet.publicKey.toBuffer(),
+          ],
+          program.programId
+        )
+        const userStakeInfo = await program.account.userStakeInfo.fetch(userStakeInfoPubkey)
+        return {
+          balance: Number((account.amount / BigInt(1000000000)).toString()),
+          stakeAmount: Number((BigInt(userStakeInfo.stakeAmount.toString())/BigInt(1000000000)).toString()),
+        }
+      } catch (e) {
+        return undefined
+      }
+    },
+    refetchInterval: 10000 // every 10 seconds
+  })
+  return { data, isLoading}
 }
 
 export const useHolder = (tokenMint: string | undefined) => {
