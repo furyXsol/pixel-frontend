@@ -12,7 +12,7 @@ const Header = () => {
   }
 
   return (
-    <header className="fixed top-0 right-0 left-0 bg-[#1A1C1F] border-b border-b-[#444444] p-4">
+    <header className="fixed top-0 right-0 left-0 bg-[#1A1C1F] border-b border-b-[#444444] p-4 z-[100]">
       <div className="flex">
         <Link to="/" className="flex items-center gap-1">
           <img src="/imgs/logo.png" alt="pixelpump-logo" width={31} height={31} />

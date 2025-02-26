@@ -20,7 +20,7 @@ const PixelItem:React.FC<PixelItemProps> = ({
     >
       <div className="flex">
         <div className="flex p-2 w-[100px] h-[100px] md:w-[133px] md:h-[133px] bg-white">
-          <img src={`${token.imageUri}`} alt="img-logo" width={133} height={133} />
+          <img src={`${token.imageUri}`} alt="img-logo" className="w-[100px] h-[100px] md:w-[133px] md:h-[133px]" />
         </div>
         <div className="flex flex-col flex-1">
           <div className="flex justify-between">
