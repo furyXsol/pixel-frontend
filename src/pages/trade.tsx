@@ -27,6 +27,7 @@ import { FEE_RECIPIENT, IS_MAIN, PROGRAM_ID, STAKING_TOKEN } from '../constants'
 import { getJitoTransferJito, sendTransactionWithJito } from '../utils/jito'
 import { useTokenInfo, useSolPrice, useHolder } from '../hooks'
 import { getMarketCap, getBondingCurvePercent, getSolAmount, shortenAddress } from '../utils'
+import { TVChartContainer } from '../components/TVChartContainer'
 
 const Trade = () => {
   const { tokenMint } = useParams()
@@ -310,8 +311,10 @@ const Trade = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-[70px] mb-[100px] lg:mb-0">
-      <div className="col-span-1">
-
+      <div className="hidden lg:flex lg:col-span-1">
+        <div style={{ height: "100%", width: "100%" }}>
+          {tokenInfo && <TVChartContainer tokenInfo={tokenInfo} />}
+        </div>
       </div>
       <div className="flex flex-col col-span-1">
         <div className="flex border-2 border-[#6e6e6e] p-2 lg:h-[20vh] gap-x-3">
@@ -478,6 +481,11 @@ const Trade = () => {
           <p className="text-white text-[15px]">{shortenAddress(tokenMint!)}</p>
           <p className="text-[#c2c2c2] text-[15px] mt-2">CREATOR:</p>
           <p className="text-white text-[15px]">{shortenAddress(tokenInfo?.creator!)}</p>
+        </div>
+      </div>
+      <div className="col-span-1 md:hidden">
+        <div style={{ height: "100%", width: "100%" }}>
+          {tokenInfo && <TVChartContainer tokenInfo={tokenInfo} />}
         </div>
       </div>
     </div>

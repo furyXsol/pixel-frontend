@@ -1,19 +1,31 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import { shortenAddress } from '../utils'
-
+import { shortenAddress, getSolAmount } from '../utils'
+import { socket } from '../hooks'
+import { BuyTokenInfo } from '../types'
 const Header = () => {
   const { connected, disconnect, publicKey: address } = useWallet()
   const { setVisible } = useWalletModal()
+  const [buyToken, setBuyToken] = useState<BuyTokenInfo>()
+  useEffect(() => {
+    socket.on('buy_token', (value) => {
+      setBuyToken(value)
+    })
+    return () => {
+      socket.off('created_token_info')
+      socket.off('buy_token')
+    }
+  },[])
 
   const showConnectionModal = () => {
     setVisible(true)
   }
 
   return (
-    <header className="fixed top-0 right-0 left-0 bg-[#1A1C1F] border-b border-b-[#444444] p-4 z-[100]">
-      <div className="flex">
+    <header className="fixed top-0 right-0 left-0 bg-[#1A1C1F] border-b border-b-[#444444] z-[100]">
+      <div className="flex p-4">
         <Link to="/" className="flex items-center gap-1">
           <img src="/imgs/logo.png" alt="pixelpump-logo" width={31} height={31} />
           <h2 className="text-[#EDFF02] text-[25px] font-normal">PIXELPUMP</h2>
@@ -42,6 +54,15 @@ const Header = () => {
           }
         </div>
       </div>
+      {buyToken && <div className="flex items-center justify-center w-full h-[25px] bg-[#edff02] shaky">
+        <p
+          className="text-[15px] text-black"
+        >
+          {shortenAddress(buyToken.buyer)} bought {getSolAmount(buyToken.sol_amount).toString().replace('.', ',')} SOL of {buyToken.symbol}
+        </p>
+      </div>
+      }
+
     </header>
   )
 }

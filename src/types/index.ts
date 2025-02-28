@@ -22,3 +22,9 @@ export interface HolderInfo {
 export interface StakerCount {
   count: number
 }
+
+export interface BuyTokenInfo{
+  buyer: string
+  sol_amount: number
+  symbol: string
+}

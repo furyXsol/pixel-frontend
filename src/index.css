@@ -23,3 +23,22 @@ body {
   font-family: 'wf_4bbceedcfc1a4581a6331c180';
   width: 100%;
 }
+
+.shaky {
+  animation: shake 3s infinite;
+}
+
+/* Define the shaky animation */
+@keyframes shake {
+  80% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+

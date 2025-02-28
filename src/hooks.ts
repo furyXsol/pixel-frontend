@@ -5,10 +5,16 @@ import { getAnchorProgram } from './constants/anchor'
 import { useEffect, useState } from 'react'
 import { BN } from '@coral-xyz/anchor'
 import { useQuery } from '@tanstack/react-query'
-import { BACKEND_URI, IS_MAIN, SOLANA_DEV_RPC, SOLANA_MAIN_RPC, STAKING_TOKEN } from './constants'
+import { BACKEND_SOCKET, BACKEND_URI, IS_MAIN, SOLANA_DEV_RPC, SOLANA_MAIN_RPC, STAKING_TOKEN } from './constants'
 import axios from 'axios'
 import { TokenInfo, HolderInfo, StakerCount } from './types'
 import { getAccount, getAssociatedTokenAddressSync } from '@solana/spl-token'
+import { io } from 'socket.io-client'
+
+
+export const socket = io(BACKEND_SOCKET, {
+  autoConnect: true
+})
 
 export const useTokenInfo = (tokenMint: string) => {
   const { data, isLoading } = useQuery({
