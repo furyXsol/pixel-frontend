@@ -18,7 +18,7 @@ const PixelItem:React.FC<PixelItemProps> = ({
       className="flex flex-col border-2 border-[#6e6e6e] p-2 cursor-pointer max-w-[482px]"
       onClick={() => {navigate(`/token/${token.mint}`)}}
     >
-      <div className="flex">
+      <div className="flex gap-x-2">
         <div className="flex p-2 w-[100px] h-[100px] md:w-[133px] md:h-[133px] bg-white">
           <img src={`${token.imageUri}`} alt="img-logo" className="w-[100px] h-[100px] md:w-[133px] md:h-[133px]" />
         </div>

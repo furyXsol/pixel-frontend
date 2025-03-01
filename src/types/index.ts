@@ -28,3 +28,9 @@ export interface BuyTokenInfo{
   sol_amount: number
   symbol: string
 }
+
+export enum SortType {
+  MARKET_CAP,
+  PROGRESS,
+  CREATION_TIME
+}

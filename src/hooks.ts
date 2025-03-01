@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { PROGRAM_ID } from './constants'
-import { AnchorWallet, useAnchorWallet, useConnection } from '@solana/wallet-adapter-react'
+import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react'
 import { getAnchorProgram } from './constants/anchor'
 import { useEffect, useState } from 'react'
 import { BN } from '@coral-xyz/anchor'
@@ -10,7 +10,7 @@ import axios from 'axios'
 import { TokenInfo, HolderInfo, StakerCount } from './types'
 import { getAccount, getAssociatedTokenAddressSync } from '@solana/spl-token'
 import { io } from 'socket.io-client'
-
+import { useWallet } from '@solana/wallet-adapter-react'
 
 export const socket = io(BACKEND_SOCKET, {
   autoConnect: true
@@ -262,6 +262,29 @@ export const useHolder = (tokenMint: string | undefined) => {
       }
     },
     refetchInterval: 5000 // every 5 seconds
+  })
+  return { data, isLoading}
+}
+
+export const useBalance = () => {
+  const { connection } = useConnection()
+  const { publicKey: address } = useWallet()
+
+   const { data, isLoading } = useQuery({
+    queryKey: [
+      'sol-balance',
+      address,
+    ],
+    queryFn: async () => {
+      if (!address || !connection) return undefined
+      try {
+        const balance = await connection.getBalance(address)
+        return balance
+      } catch (e) {
+        return undefined
+      }
+    },
+    refetchInterval: 10000 // every 10 seconds
   })
   return { data, isLoading}
 }
