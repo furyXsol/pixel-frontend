@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useState, useMemo } from 'react'
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react'
 import {
   PublicKey,
@@ -15,9 +15,9 @@ import {
 } from '@solana/spl-token'
 import { BN } from '@coral-xyz/anchor'
 import { useStakerCount, useStakeInfo, useStakeTokenBalance } from '../hooks'
-import { numberWithCommas } from '../utils'
+import { numberWithCommas, getSolAmount } from '../utils'
 import { toast } from 'react-toastify'
-import { STAKING_TOKEN, IS_MAIN } from '../constants'
+import { STAKING_TOKEN, IS_MAIN, EPOCH_DURATION, STAKING_TOKEN_DECIMAL } from '../constants'
 import { getAnchorProgram } from '../constants/anchor'
 import { getJitoTransferJito, sendTransactionWithJito } from '../utils/jito'
 
@@ -28,7 +28,51 @@ const StakingPage = () => {
   const { connection } = useConnection()
   const { data: stakerCount } = useStakerCount()
   const { data: stakeInfo} = useStakeInfo()
-  const { data: stakTokenBalance } = useStakeTokenBalance()
+
+  const { data: userStakInfo } = useStakeTokenBalance()
+  const claimSolAmount = useMemo(()=> {
+    if (!stakeInfo || !userStakInfo) return BigInt(0)
+
+    const currentTime = Math.floor(new Date().getTime()/1000)
+    const firstEpochStartTime =stakeInfo.firstEpochStartTime
+    const epochDuration = EPOCH_DURATION
+    const currentEpoch = Math.floor((currentTime - firstEpochStartTime) / epochDuration)
+    const userStakeAmount = userStakInfo.stakeAmount
+    const lastEpoch = userStakInfo.lastEpoch
+    if (userStakeAmount == BigInt(0)) {
+      return BigInt(0)
+    }
+    let claimAmount = userStakInfo.pendingReward
+    if (lastEpoch + 1 < currentEpoch) {
+      let  i = lastEpoch + 1
+      let pendingRewards = BigInt(0)
+      let prevTotalStakeAmount = BigInt(0)
+      while(true) {
+        if (i >= currentEpoch) {
+          break
+        }
+        if (stakeInfo.rewards.has(i)) {
+          let epochReward = stakeInfo.rewards.get(i) as bigint
+          if (stakeInfo.total_stakes.has(i)) {
+            let epochTotalStakes = stakeInfo.total_stakes.get(i) as bigint
+            prevTotalStakeAmount = epochTotalStakes
+            if (epochTotalStakes > BigInt(0)) {
+              pendingRewards += userStakeAmount * epochReward / epochTotalStakes
+            }
+          } else {
+            let epochTotalStakes = prevTotalStakeAmount
+            if (epochTotalStakes > BigInt(0)) {
+              pendingRewards += userStakeAmount * epochReward / epochTotalStakes
+            }
+          }
+        }
+        i += 1;
+      }
+      claimAmount += pendingRewards
+    }
+    return claimAmount
+
+  }, [stakeInfo, userStakInfo])
   const stake = async () => {
     if (!wallet || !connection) {
       toast.error("Please connect wallet first.")
@@ -336,13 +380,13 @@ const StakingPage = () => {
       <div className="flex mt-[20px] border-2 border-[#6e6e6e] p-3">
         <div className="flex flex-col gap-y-[10px]">
           <p className="text-[#c2c2c2] text-[20px]">YOUR STAKED PXP</p>
-          <p className="text-white text-[20px]">{numberWithCommas(stakTokenBalance?.stakeAmount??0)} PXP</p>
+          <p className="text-white text-[20px]">{numberWithCommas(getSolAmount((Number((userStakInfo?.stakeAmount??BigInt(0)).toString())), STAKING_TOKEN_DECIMAL))} PXP</p>
         </div>
       </div>
       <div className="flex justify-between mt-[20px] border-2 border-[#6e6e6e] p-3">
         <div className="flex flex-col gap-y-[10px]">
           <p className="text-[#c2c2c2] text-[20px] text-left">YOUR REWARDS</p>
-          <p className="text-white text-[20px] text-left">- SOL</p>
+          <p className="text-white text-[20px] text-left">{numberWithCommas(getSolAmount(Number(claimSolAmount.toString())))} SOL</p>
         </div>
         <div className="flex items-center">
           <button
@@ -373,7 +417,7 @@ const StakingPage = () => {
       <div className="flex flex-col mt-[20px] border-2 border-[#6e6e6e] p-4">
         <div className="flex gap-x-[10px]">
           <p className="text-[#c2c2c2] text-[23px]">YOUR BALANCE:</p>
-          <p className="text-white text-[22px]">{numberWithCommas(stakTokenBalance?.balance??0)} PXP</p>
+          <p className="text-white text-[22px]">{numberWithCommas(getSolAmount(Number((userStakInfo?.balance??BigInt(0)).toString()), STAKING_TOKEN_DECIMAL))} PXP</p>
         </div>
         <div className="flex justify-between border border-[#6e6e6e] p-2 mt-[10px]">
           <input

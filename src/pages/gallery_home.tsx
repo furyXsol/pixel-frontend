@@ -73,7 +73,7 @@ const GalleryHome = () => {
       </div>
       <div className="md:mx-8 mt-8">
         <div className="flex mt-4">
-          <p
+          <div
             className="flex items-center text-[10px] text-white"
             style={{fontFamily: 'wf_56906c412d2a453f907c10dd5'}}
           >
@@ -83,11 +83,11 @@ const GalleryHome = () => {
               selectedItem={selectedFilter}
               setSelectedItem={setSelectedFilter}
             />
-          </p>
+          </div>
         </div>
         <div className="mt-[20px] grid grid-cols-1 xl:grid-cols-3">
           {filteredTokens && filteredTokens.map((token) => (
-            <PixelItem token={token}/>
+            <PixelItem key={token.mint} token={token}/>
           ))}
         </div>
       </div>

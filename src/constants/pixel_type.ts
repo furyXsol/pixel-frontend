@@ -699,6 +699,30 @@ export type Pixel = {
       }
     },
     {
+      "name": "stakeHolder",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "curentTotalStake",
+            "type": "u64"
+          },
+          {
+            "name": "firstEpochStartTime",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
       "name": "userStakeInfo",
       "type": {
         "kind": "struct",
@@ -1757,6 +1781,30 @@ export const IDL: Pixel = {
           {
             "name": "stakeToken",
             "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stakeHolder",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "curentTotalStake",
+            "type": "u64"
+          },
+          {
+            "name": "firstEpochStartTime",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
           }
         ]
       }

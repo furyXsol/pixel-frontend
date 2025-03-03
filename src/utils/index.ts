@@ -29,8 +29,8 @@ export const getBondingCurvePercent = (solAmount: number): string => {
   return Number(((solAmount / 85000000000) * 100).toFixed(2)).toString()
 }
 
-export const getSolAmount = (solDecimalAmount: number): number => {
-  return Number((solDecimalAmount / 1000000000).toFixed(2))
+export const getSolAmount = (solDecimalAmount: number, decimals?:number): number => {
+  return Number((solDecimalAmount / 1000000000).toFixed(decimals??2))
 }
 
 export const getMarketCap = (solAmount: number, soldTokenAmount: number, solPrice: number):string => {

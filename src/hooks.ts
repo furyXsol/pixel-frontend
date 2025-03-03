@@ -11,6 +11,8 @@ import { TokenInfo, HolderInfo, StakerCount } from './types'
 import { getAccount, getAssociatedTokenAddressSync } from '@solana/spl-token'
 import { io } from 'socket.io-client'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { getSolAmount } from './utils'
+import { deserialize } from 'borsh'
 
 export const socket = io(BACKEND_SOCKET, {
   autoConnect: true
@@ -117,13 +119,13 @@ export const useStakerCount = () => {
       try {
         const res = await axios.get(`${BACKEND_URI}/tokens/staker_count`)
         if (!res || !res.data) {
-          return undefined
+          return null
         }
         const resCount: StakerCount = res.data
         return resCount.count
       } catch(e) {
         console.log(e)
-        return undefined
+        return null
       }
     },
     refetchInterval: 10000 // every 10 seconds
@@ -179,12 +181,45 @@ export const useStakeInfo = () => {
         )
         const program = getAnchorProgram(connection)
         const info = await program.account.stakeHolder.fetch(stakingHolder)
-        const rewardAmount = await program.provider.connection.getBalance(stakingHolder, {commitment: 'confirmed'})
+        const stakerHolderBalance = await program.provider.connection.getBalance(stakingHolder, {commitment: 'confirmed'})
+
+        const SCHEMA = {
+          struct : {
+              rewards: {
+                  map: {
+                      key: "u16",
+                      value: "u64"
+                  }
+              },
+              total_stakes: {
+                  map: {
+                      key: "u16",
+                      value: "u64"
+                  }
+              }
+          }
+        }
+        const accountInfo = await program.provider.connection.getAccountInfo(stakingHolder)
+        if (!accountInfo) {
+          console.log('Account not found!')
+          return null
+        }
+        const data = accountInfo.data
+        let offset = 8 + 1 + 8 + 4 + 1
+        const entry = deserialize(SCHEMA, data.slice(offset)) as {
+          rewards: Map<number, BigInt>,
+          total_stakes: Map<number, BigInt>
+        }
+
+
         return {
           totalStake: Number((BigInt(info.curentTotalStake.toString()) / BigInt(1000000000)).toString()),
-          rewardAmount: Number((rewardAmount / 1000000000).toFixed(2))
+          rewardAmount: getSolAmount(stakerHolderBalance - 	42804000, 7),  // 42804000: Account's Rempt
+          ...entry,
+          firstEpochStartTime: Number(info.firstEpochStartTime.toString())
         }
       } catch (e) {
+        console.log('------error:', e)
         return undefined
       }
     },
@@ -217,8 +252,10 @@ export const useStakeTokenBalance = () => {
         )
         const userStakeInfo = await program.account.userStakeInfo.fetch(userStakeInfoPubkey)
         return {
-          balance: Number((account.amount / BigInt(1000000000)).toString()),
-          stakeAmount: Number((BigInt(userStakeInfo.stakeAmount.toString())/BigInt(1000000000)).toString()),
+          balance: account.amount,
+          stakeAmount: BigInt(userStakeInfo.stakeAmount.toString()),
+          lastEpoch: userStakeInfo.lastEpoch,
+          pendingReward: BigInt(userStakeInfo.pendingReward.toString()),
         }
       } catch (e) {
         return undefined

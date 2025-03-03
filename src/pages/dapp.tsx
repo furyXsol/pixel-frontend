@@ -64,7 +64,7 @@ const DApp = () => {
       </div>
       <div className="mx-8 mt-8">
         <div className="flex mt-4">
-          <p
+          <div
             className="flex items-center text-[10px] text-white"
             style={{fontFamily: 'wf_56906c412d2a453f907c10dd5'}}
           >
@@ -74,7 +74,7 @@ const DApp = () => {
               selectedItem={selectedFilter}
               setSelectedItem={setSelectedFilter}
             />
-          </p>
+          </div>
         </div>
         <div className="mt-[20px] grid grid-cols-1 xl:grid-cols-3">
           {tokens && tokens.map((token) => (
